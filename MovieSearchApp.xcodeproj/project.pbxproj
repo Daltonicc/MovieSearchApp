@@ -22,6 +22,10 @@
 		6A49DC6B2808711E006C50DC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC6A2808711E006C50DC /* Kingfisher */; };
 		6A49DC6E2808712E006C50DC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC6D2808712E006C50DC /* Alamofire */; };
 		6A49DC7128087144006C50DC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC7028087144006C50DC /* SwiftyJSON */; };
+		6A49DC7428087C86006C50DC /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC7328087C86006C50DC /* BaseView.swift */; };
+		6A49DC7728087CAF006C50DC /* ViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC7628087CAF006C50DC /* ViewRepresentable.swift */; };
+		6A49DC7928087D0F006C50DC /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC7828087D0F006C50DC /* BaseViewController.swift */; };
+		6A49DC7C28087DD2006C50DC /* UITableViewCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC7B28087DD2006C50DC /* UITableViewCell+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +59,10 @@
 		6A49DC462808537D006C50DC /* MovieSearchAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchAppUITests.swift; sourceTree = "<group>"; };
 		6A49DC482808537D006C50DC /* MovieSearchAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6A49DC5F28086213006C50DC /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		6A49DC7328087C86006C50DC /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		6A49DC7628087CAF006C50DC /* ViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRepresentable.swift; sourceTree = "<group>"; };
+		6A49DC7828087D0F006C50DC /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		6A49DC7B28087DD2006C50DC /* UITableViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,8 +199,44 @@
 		6A49DC5D28085AA7006C50DC /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				6A49DC7A28087DBD006C50DC /* Extension */,
+				6A49DC7528087CA5006C50DC /* Protocol */,
+				6A49DC7228087C43006C50DC /* Base */,
+				6A49DC7D28087E1F006C50DC /* Custom */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		6A49DC7228087C43006C50DC /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				6A49DC7328087C86006C50DC /* BaseView.swift */,
+				6A49DC7828087D0F006C50DC /* BaseViewController.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		6A49DC7528087CA5006C50DC /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				6A49DC7628087CAF006C50DC /* ViewRepresentable.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		6A49DC7A28087DBD006C50DC /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				6A49DC7B28087DD2006C50DC /* UITableViewCell+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		6A49DC7D28087E1F006C50DC /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Custom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -363,9 +407,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A49DC7C28087DD2006C50DC /* UITableViewCell+Extension.swift in Sources */,
 				6A49DC2A2808537C006C50DC /* MovieSearchViewController.swift in Sources */,
 				6A49DC262808537C006C50DC /* AppDelegate.swift in Sources */,
 				6A49DC282808537C006C50DC /* SceneDelegate.swift in Sources */,
+				6A49DC7428087C86006C50DC /* BaseView.swift in Sources */,
+				6A49DC7728087CAF006C50DC /* ViewRepresentable.swift in Sources */,
+				6A49DC7928087D0F006C50DC /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
