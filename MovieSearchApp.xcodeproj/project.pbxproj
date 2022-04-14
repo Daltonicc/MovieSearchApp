@@ -16,6 +16,12 @@
 		6A49DC472808537D006C50DC /* MovieSearchAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC462808537D006C50DC /* MovieSearchAppUITests.swift */; };
 		6A49DC492808537D006C50DC /* MovieSearchAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC482808537D006C50DC /* MovieSearchAppUITestsLaunchTests.swift */; };
 		6A49DC6028086213006C50DC /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6A49DC5F28086213006C50DC /* .swiftlint.yml */; };
+		6A49DC63280870FF006C50DC /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC62280870FF006C50DC /* RxCocoa */; };
+		6A49DC65280870FF006C50DC /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC64280870FF006C50DC /* RxSwift */; };
+		6A49DC682808710D006C50DC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC672808710D006C50DC /* SnapKit */; };
+		6A49DC6B2808711E006C50DC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC6A2808711E006C50DC /* Kingfisher */; };
+		6A49DC6E2808712E006C50DC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC6D2808712E006C50DC /* Alamofire */; };
+		6A49DC7128087144006C50DC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 6A49DC7028087144006C50DC /* SwiftyJSON */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +62,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A49DC7128087144006C50DC /* SwiftyJSON in Frameworks */,
+				6A49DC6E2808712E006C50DC /* Alamofire in Frameworks */,
+				6A49DC6B2808711E006C50DC /* Kingfisher in Frameworks */,
+				6A49DC682808710D006C50DC /* SnapKit in Frameworks */,
+				6A49DC65280870FF006C50DC /* RxSwift in Frameworks */,
+				6A49DC63280870FF006C50DC /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +212,14 @@
 			dependencies = (
 			);
 			name = MovieSearchApp;
+			packageProductDependencies = (
+				6A49DC62280870FF006C50DC /* RxCocoa */,
+				6A49DC64280870FF006C50DC /* RxSwift */,
+				6A49DC672808710D006C50DC /* SnapKit */,
+				6A49DC6A2808711E006C50DC /* Kingfisher */,
+				6A49DC6D2808712E006C50DC /* Alamofire */,
+				6A49DC7028087144006C50DC /* SwiftyJSON */,
+			);
 			productName = MovieSearchApp;
 			productReference = 6A49DC222808537C006C50DC /* MovieSearchApp.app */;
 			productType = "com.apple.product-type.application";
@@ -272,6 +292,13 @@
 				Base,
 			);
 			mainGroup = 6A49DC192808537C006C50DC;
+			packageReferences = (
+				6A49DC61280870FF006C50DC /* XCRemoteSwiftPackageReference "RxSwift" */,
+				6A49DC662808710D006C50DC /* XCRemoteSwiftPackageReference "SnapKit" */,
+				6A49DC692808711E006C50DC /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				6A49DC6C2808712E006C50DC /* XCRemoteSwiftPackageReference "Alamofire" */,
+				6A49DC6F28087144006C50DC /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
 			productRefGroup = 6A49DC232808537C006C50DC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -676,6 +703,82 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6A49DC61280870FF006C50DC /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 6.5.0;
+			};
+		};
+		6A49DC662808710D006C50DC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 5.6.0;
+			};
+		};
+		6A49DC692808711E006C50DC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 7.2.0;
+			};
+		};
+		6A49DC6C2808712E006C50DC /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 5.6.0;
+			};
+		};
+		6A49DC6F28087144006C50DC /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6A49DC62280870FF006C50DC /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A49DC61280870FF006C50DC /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		6A49DC64280870FF006C50DC /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A49DC61280870FF006C50DC /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		6A49DC672808710D006C50DC /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A49DC662808710D006C50DC /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		6A49DC6A2808711E006C50DC /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A49DC692808711E006C50DC /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		6A49DC6D2808712E006C50DC /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A49DC6C2808712E006C50DC /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		6A49DC7028087144006C50DC /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A49DC6F28087144006C50DC /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6A49DC1A2808537C006C50DC /* Project object */;
 }
