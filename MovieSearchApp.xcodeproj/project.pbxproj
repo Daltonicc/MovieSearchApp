@@ -15,6 +15,7 @@
 		6A49DC3D2808537D006C50DC /* MovieSearchAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC3C2808537D006C50DC /* MovieSearchAppTests.swift */; };
 		6A49DC472808537D006C50DC /* MovieSearchAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC462808537D006C50DC /* MovieSearchAppUITests.swift */; };
 		6A49DC492808537D006C50DC /* MovieSearchAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A49DC482808537D006C50DC /* MovieSearchAppUITestsLaunchTests.swift */; };
+		6A49DC6028086213006C50DC /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6A49DC5F28086213006C50DC /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		6A49DC422808537D006C50DC /* MovieSearchAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieSearchAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A49DC462808537D006C50DC /* MovieSearchAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchAppUITests.swift; sourceTree = "<group>"; };
 		6A49DC482808537D006C50DC /* MovieSearchAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		6A49DC5F28086213006C50DC /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 		6A49DC192808537C006C50DC = {
 			isa = PBXGroup;
 			children = (
+				6A49DC5F28086213006C50DC /* .swiftlint.yml */,
 				6A49DC242808537C006C50DC /* MovieSearchApp */,
 				6A49DC3B2808537D006C50DC /* MovieSearchAppTests */,
 				6A49DC452808537D006C50DC /* MovieSearchAppUITests */,
@@ -285,6 +288,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A49DC6028086213006C50DC /* .swiftlint.yml in Resources */,
 				6A49DC322808537D006C50DC /* LaunchScreen.storyboard in Resources */,
 				6A49DC2F2808537D006C50DC /* Assets.xcassets in Resources */,
 			);

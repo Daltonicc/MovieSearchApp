@@ -13,7 +13,5 @@ class MovieSearchViewController: UIViewController {
         super.viewDidLoad()
 
     }
-
-    
+ 
 }
-
