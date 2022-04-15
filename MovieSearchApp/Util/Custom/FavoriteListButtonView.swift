@@ -14,7 +14,7 @@ final class FavoriteListButtonView: BaseView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
         imageView.image = UIImage(systemName: "star.fill")
-        imageView.tintColor = .yellow
+        imageView.tintColor = .systemYellow
         return imageView
     }()
     let favoriteLabel: UILabel = {
@@ -34,6 +34,10 @@ final class FavoriteListButtonView: BaseView {
 
     override func setUpView() {
 
+        self.layer.borderColor = UIColor.systemGray4.cgColor
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 5
+
         addSubview(starImageView)
         addSubview(favoriteLabel)
     }
@@ -45,7 +49,7 @@ final class FavoriteListButtonView: BaseView {
         }
         favoriteLabel.snp.makeConstraints { make in
             make.top.trailing.bottom.equalToSuperview().inset(5)
-            make.leading.equalTo(starImageView.snp.trailing).offset(5)
+            make.leading.equalTo(starImageView.snp.trailing)
         }
     }
 }
