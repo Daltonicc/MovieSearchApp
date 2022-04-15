@@ -6,17 +6,30 @@
 //
 
 import UIKit
+import SnapKit
 
 final class MovieSearchView: BaseView {
 
-    let favoriteButtonListButton: UIButton = {
-        let button = UIButton()
+    let titleView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "네이버 영화 검색"
+        label.font = .boldSystemFont(ofSize: 25)
+        return label
+    }()
+    let favoriteButtonListbarButton: UIBarButtonItem = {
+        let barbutton = UIBarButtonItem()
         let view = FavoriteListButtonView()
-        button.addSubview(view)
-        return button
+        barbutton.customView = view
+        return barbutton
     }()
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
+        searchBar.placeholder = ""
+        searchBar.searchBarStyle = .minimal
         return searchBar
     }()
     let movieTableView: UITableView = {
@@ -34,9 +47,26 @@ final class MovieSearchView: BaseView {
 
     override func setUpView() {
 
+        addSubview(titleView)
+        addSubview(searchBar)
+        addSubview(movieTableView)
+
+        titleView.addSubview(titleLabel)
     }
 
     override func setUpConstraint() {
 
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide).inset(0)
+            make.leading.trailing.equalToSuperview().inset(10)
+        }
+        movieTableView.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom).offset(10)
+            make.leading.trailing.bottom.equalToSuperview().inset(10)
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 }
