@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class MovieTableViewCell: UITableViewCell {
 
@@ -36,5 +37,36 @@ final class MovieTableViewCell: UITableViewCell {
         cellView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    func cellConfig(movieItem: MovieItem) {
+
+        if let imageurl = URL(string: movieItem.image) {
+            cellView.posterImageView.kf.setImage(with: imageurl)
+        } else {
+            cellView.posterImageView.image = UIImage(systemName: "star")
+        }
+        
+        let title = movieItem.title
+            .replacingOccurrences(of: "<b>", with: "")
+            .replacingOccurrences(of: "</b>", with: "")
+        var director = movieItem.director
+            .replacingOccurrences(of: "|", with: ", ")
+        var actor = movieItem.actor
+            .replacingOccurrences(of: "|", with: ", ")
+        let rate = movieItem.userRating
+
+        if director.count >= 1 {
+            director.removeLast()
+            director.removeLast()
+        }
+        if actor.count >= 1 {
+            actor.removeLast()
+            actor.removeLast()
+        }
+        cellView.titleLabel.text = title
+        cellView.directorLabel.text = "감독: \(director)"
+        cellView.actorLabel.text = "출연: \(actor)"
+        cellView.rateLabel.text = "평점: \(rate)"
     }
 }
