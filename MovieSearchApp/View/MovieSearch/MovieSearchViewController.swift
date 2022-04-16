@@ -77,6 +77,13 @@ final class MovieSearchViewController: BaseViewController {
                 self.mainView.makeToast(errorMessage)
             }
             .disposed(by: disposeBag)
+
+        output.noResultAction
+            .drive { [weak self] bool in
+                guard let self = self else { return }
+                self.mainView.noResultLabel.isHidden = bool
+            }
+            .disposed(by: disposeBag)
     }
 
     private func showFavoriteView() {
@@ -94,7 +101,9 @@ final class MovieSearchViewController: BaseViewController {
     }
 
     @objc private func favoriteListBarButtonTap(sender: UIButton) {
-        pressFavoriteButtonList.accept(())
+        addPressAnimationToButton(mainView.favoriteButtonListBarButton) { [weak self] _ in
+            self?.pressFavoriteButtonList.accept(())
+        }
     }
 }
 

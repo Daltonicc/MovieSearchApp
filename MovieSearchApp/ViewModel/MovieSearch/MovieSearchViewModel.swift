@@ -29,13 +29,13 @@ final class MovieSearchViewModel: ViewModelType {
     private let indicatorAction = BehaviorRelay<Bool>(value: false)
     private let didLoadMovieData = BehaviorRelay<[MovieItem]>(value: [])
     private let didLoadFavoriteView = PublishRelay<Void>()
-    private let noResultAction = BehaviorRelay<Bool>(value: false)
+    private let noResultAction = BehaviorRelay<Bool>(value: true)
 
     var disposeBag = DisposeBag()
 
-    var start = 1
-    var display = 20
-    var total = 0
+    private var start = 1
+    private var display = 20
+    private var total = 0
 
     var totalMovieData: [MovieItem] = []
 
@@ -48,9 +48,10 @@ final class MovieSearchViewModel: ViewModelType {
                 self.getMovieData(query: query) { response in
                     switch response {
                     case .success(let data):
-                        self.total = data.total
+                        let noResultCheck = self.checkNoResult(movieItem: data.items)
                         self.appendData(movieItem: data.items)
                         self.didLoadMovieData.accept(self.totalMovieData)
+                        self.noResultAction.accept(noResultCheck)
                     case .failure(let error):
                         self.failToastAction.accept(error.errorDescription!)
                     }
@@ -108,6 +109,14 @@ extension MovieSearchViewModel {
             APIManager.shared.getMovieData(query: query, start: start, display: total - start, completion: completion)
         } else {
             return
+        }
+    }
+
+    func checkNoResult(movieItem: [MovieItem]) -> Bool {
+        if movieItem.count == 0 {
+            return false
+        } else {
+            return true
         }
     }
 
