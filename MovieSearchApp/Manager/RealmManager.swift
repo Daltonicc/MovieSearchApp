@@ -8,10 +8,6 @@
 import Foundation
 import RealmSwift
 
-enum SortType: String {
-    case isFavorite
-}
-
 final class RealmManager {
     private init() {
         print(localRealm.configuration.fileURL)
@@ -32,10 +28,6 @@ final class RealmManager {
 
     }
 
-    func loadListDataBy(sortType: SortType) -> Results<FavoriteMovieList> {
-        return localRealm.objects(FavoriteMovieList.self).sorted(byKeyPath: sortType.rawValue, ascending: true)
-    }
-
     func deleteListData(index: Int) {
         let task = localRealm.objects(FavoriteMovieList.self)[index]
         try! localRealm.write {
@@ -48,13 +40,4 @@ final class RealmManager {
             localRealm.delete(object)
         }
     }
-
-    func updateListData(index: Int, to change: Bool) {
-        let task = localRealm.objects(FavoriteMovieList.self)[index]
-
-        try! localRealm.write {
-            task.isFavorite = change
-        }
-    }
 }
-
