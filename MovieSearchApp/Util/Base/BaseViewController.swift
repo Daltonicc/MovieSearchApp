@@ -13,6 +13,7 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         setViewConfig()
         navigationItemConfig()
+        bind()
     }
 
     func setViewConfig() {
@@ -20,4 +21,5 @@ class BaseViewController: UIViewController {
     }
 
     func navigationItemConfig() {}
+    func bind() {}
 }
