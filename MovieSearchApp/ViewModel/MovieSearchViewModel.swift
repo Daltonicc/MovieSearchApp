@@ -15,6 +15,7 @@ final class MovieSearchViewModel: ViewModelType {
     struct Input {
         let requestMovieListEvent: Signal<String>
         let requestNextPageMovieListEvent: Signal<String>
+        let requestFavoriteMovieListEvent: Signal<Void>
         let pressFavoriteButtonList: Signal<Void>
         let pressFavoriteButton: Signal<Int>
         let pressMovieItem: Signal<Int>
@@ -26,7 +27,7 @@ final class MovieSearchViewModel: ViewModelType {
         let didLoadMovieData: Driver<[MovieItem]>
         let didLoadFavoriteView: Signal<Void>
         let noResultAction: Driver<Bool>
-        let didPressFavoriteButton: Driver<Bool>
+        let didPressFavoriteButton: Signal<Void>
         let didPressMovieItem: Signal<MovieItem>
     }
 
@@ -35,7 +36,7 @@ final class MovieSearchViewModel: ViewModelType {
     private let didLoadMovieData = BehaviorRelay<[MovieItem]>(value: [])
     private let didLoadFavoriteView = PublishRelay<Void>()
     private let noResultAction = BehaviorRelay<Bool>(value: true)
-    private let didPressFavoriteButton = BehaviorRelay<Bool>(value: false)
+    private let didPressFavoriteButton = PublishRelay<Void>()
     private let didPressMovieItem = PublishRelay<MovieItem>()
 
     var disposeBag = DisposeBag()
@@ -99,8 +100,8 @@ final class MovieSearchViewModel: ViewModelType {
         input.pressFavoriteButton
             .emit { [weak self] row in
                 guard let self = self else { return }
-                let isFavorite = self.checkFavoriteList(row: row)
-                self.didPressFavoriteButton.accept(isFavorite)
+                self.checkFavoriteList(row: row)
+                self.didPressFavoriteButton.accept(())
             }
             .disposed(by: disposeBag)
 
@@ -117,7 +118,7 @@ final class MovieSearchViewModel: ViewModelType {
             didLoadMovieData: didLoadMovieData.asDriver(),
             didLoadFavoriteView: didLoadFavoriteView.asSignal(),
             noResultAction: noResultAction.asDriver(),
-            didPressFavoriteButton: didPressFavoriteButton.asDriver(),
+            didPressFavoriteButton: didPressFavoriteButton.asSignal(),
             didPressMovieItem: didPressMovieItem.asSignal()
         )
     }
@@ -152,21 +153,18 @@ extension MovieSearchViewModel {
         }
     }
 
-    func checkFavoriteList(row: Int) -> Bool {
+    func checkFavoriteList(row: Int) {
 
         let filterValue = favoriteMovieList.filter { $0.title == self.totalMovieData[row].title }
         if filterValue.count == 0 {
             addToDataBase(movieItem: totalMovieData[row])
-            return true
         } else {
             for i in 0..<favoriteMovieList.count {
                 if favoriteMovieList[i].title == totalMovieData[row].title {
                     removeFromDataBase(movieItem: favoriteMovieList[i])
-                    return false
                 }
             }
         }
-        return false
     }
 
     func addToDataBase(movieItem: MovieItem) {
