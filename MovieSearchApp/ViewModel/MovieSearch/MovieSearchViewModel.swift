@@ -15,6 +15,8 @@ final class MovieSearchViewModel: ViewModelType {
         let requestMovieListEvent: Signal<String>
         let requestNextPageMovieListEvent: Signal<String>
         let pressFavoriteButtonList: Signal<Void>
+        let pressFavoriteButton: Signal<Bool>
+        let pressMovieItem: Signal<Int>
     }
 
     struct Output {
@@ -23,6 +25,8 @@ final class MovieSearchViewModel: ViewModelType {
         let didLoadMovieData: Driver<[MovieItem]>
         let didLoadFavoirteView: Signal<Void>
         let noResultAction: Driver<Bool>
+        let didPressFavoriteButton: Driver<Bool>
+        let didPressMovieItem: Signal<MovieItem>
     }
 
     private let failToastAction = PublishRelay<String>()
@@ -30,6 +34,8 @@ final class MovieSearchViewModel: ViewModelType {
     private let didLoadMovieData = BehaviorRelay<[MovieItem]>(value: [])
     private let didLoadFavoriteView = PublishRelay<Void>()
     private let noResultAction = BehaviorRelay<Bool>(value: true)
+    private let didPressFavoriteButton = BehaviorRelay<Bool>(value: false)
+    private let didPressMovieItem = PublishRelay<MovieItem>()
 
     var disposeBag = DisposeBag()
 
@@ -62,7 +68,6 @@ final class MovieSearchViewModel: ViewModelType {
         input.requestNextPageMovieListEvent
             .emit { [weak self] query in
                 guard let self = self else { return }
-                print("input")
                 self.getNextPageMovieData(query: query) { response in
                     switch response {
                     case .success(let data):
@@ -82,12 +87,21 @@ final class MovieSearchViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        input.pressMovieItem
+            .emit { [weak self] row in
+                guard let self = self else { return }
+                self.didPressMovieItem.accept(self.totalMovieData[row])
+            }
+            .disposed(by: disposeBag)
+
         return Output(
             failToastAction: failToastAction.asSignal(),
             indicatorAction: indicatorAction.asDriver(),
             didLoadMovieData: didLoadMovieData.asDriver(),
             didLoadFavoirteView: didLoadFavoriteView.asSignal(),
-            noResultAction: noResultAction.asDriver()
+            noResultAction: noResultAction.asDriver(),
+            didPressFavoriteButton: didPressFavoriteButton.asDriver(),
+            didPressMovieItem: didPressMovieItem.asSignal()
         )
     }
 }
@@ -97,10 +111,10 @@ extension MovieSearchViewModel {
     func getMovieData(query: String, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
         total = 0
         start = 1
-        display = 20
         APIManager.shared.getMovieData(query: query, start: start, display: display, completion: completion)
     }
 
+    // 마지막 페이지 확인하고 데이터 Fetch 해주는 Logic
     func getNextPageMovieData(query: String, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
         start += 20
         if start + display < total {
@@ -112,6 +126,7 @@ extension MovieSearchViewModel {
         }
     }
 
+    // 결과값 있는지, 없는지 확인하는 Logic
     func checkNoResult(movieItem: [MovieItem]) -> Bool {
         if movieItem.count == 0 {
             return false
