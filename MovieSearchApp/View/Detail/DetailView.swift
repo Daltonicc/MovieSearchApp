@@ -24,6 +24,11 @@ final class DetailView: BaseView {
         let webView = WKWebView()
         return webView
     }()
+    let separateView2: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray5
+        return view
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,6 +43,7 @@ final class DetailView: BaseView {
 
         addSubview(separateView)
         addSubview(movieView)
+        addSubview(separateView2)
         addSubview(webView)
     }
 
@@ -53,8 +59,13 @@ final class DetailView: BaseView {
             make.leading.trailing.equalToSuperview().inset(10)
             make.height.equalTo(110)
         }
-        webView.snp.makeConstraints { make in
+        separateView2.snp.makeConstraints { make in
             make.top.equalTo(movieView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(5)
+        }
+        webView.snp.makeConstraints { make in
+            make.top.equalTo(separateView2.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
     }
