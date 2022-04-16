@@ -20,12 +20,14 @@ final class MovieSearchViewModel: ViewModelType {
         let failToastAction: Signal<String>
         let indicatorAction: Driver<Bool>
         let didLoadMovieData: Driver<[MovieItem]>
+        let didLoadFavoirteView: Signal<Void>
         let noResultAction: Driver<Bool>
     }
 
     private let failToastAction = PublishRelay<String>()
     private let indicatorAction = BehaviorRelay<Bool>(value: false)
     private let didLoadMovieData = BehaviorRelay<[MovieItem]>(value: [])
+    private let didLoadFavoriteView = PublishRelay<Void>()
     private let noResultAction = BehaviorRelay<Bool>(value: false)
 
     var disposeBag = DisposeBag()
@@ -46,10 +48,18 @@ final class MovieSearchViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        input.pressFavoriteButtonList
+            .emit { [weak self] _ in
+                guard let self = self else { return }
+                self.didLoadFavoriteView.accept(())
+            }
+            .disposed(by: disposeBag)
+
         return Output(
             failToastAction: failToastAction.asSignal(),
             indicatorAction: indicatorAction.asDriver(),
             didLoadMovieData: didLoadMovieData.asDriver(),
+            didLoadFavoirteView: didLoadFavoriteView.asSignal(),
             noResultAction: noResultAction.asDriver()
         )
     }

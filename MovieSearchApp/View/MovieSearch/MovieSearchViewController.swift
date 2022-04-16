@@ -8,13 +8,14 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 final class MovieSearchViewController: BaseViewController {
 
     private lazy var input = MovieSearchViewModel.Input(
         requestMovieListEvent: requestMovieListEvent.asSignal(),
-        pressFavoriteButtonList: mainView.favoriteButtonListbarButton.rx.tap.asSignal()
-    )
+        pressFavoriteButtonList: pressFavoriteButtonList.asSignal()
+        )
     private lazy var output = viewModel.transform(input: input)
 
     private let mainView = MovieSearchView()
@@ -42,12 +43,14 @@ final class MovieSearchViewController: BaseViewController {
 
         mainView.searchBar.delegate = self
         mainView.searchBar.searchTextField.delegate = self
+
+        mainView.favoriteButtonListBarButton.addTarget(self, action: #selector(favoriteListBarButtonTap(sender:)), for: .touchUpInside)
     }
 
     override func navigationItemConfig() {
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: mainView.titleView)
-        navigationItem.rightBarButtonItem = mainView.favoriteButtonListbarButton
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: mainView.favoriteButtonListBarButton)
     }
 
     override func bind() {
@@ -57,6 +60,31 @@ final class MovieSearchViewController: BaseViewController {
                 cell.cellConfig(movieItem: element)
             }
             .disposed(by: disposeBag)
+
+        output.didLoadFavoirteView
+            .emit { [weak self] _ in
+                guard let self = self else { return }
+                self.showFavoriteView()
+            }
+            .disposed(by: disposeBag)
+
+        output.failToastAction
+            .emit { [weak self] errorMessage in
+                guard let self = self else { return }
+                self.mainView.makeToast(errorMessage)
+            }
+            .disposed(by: disposeBag)
+    }
+
+    private func showFavoriteView() {
+        let favoriteView = FavoriteViewController()
+        favoriteView.modalTransitionStyle = .coverVertical
+        favoriteView.modalPresentationStyle = .fullScreen
+        self.present(favoriteView, animated: true, completion: nil)
+    }
+
+    @objc private func favoriteListBarButtonTap(sender: UIButton) {
+        pressFavoriteButtonList.accept(())
     }
 }
 
