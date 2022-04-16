@@ -10,13 +10,13 @@ import Foundation
 struct MovieData: Codable {
     let lastBuildDate: String
     let total, start, display: Int
-    let items: [Item]
+    let items: [MovieItem]
 }
 
-struct Item: Codable {
+struct MovieItem: Codable {
     let title: String
     let link: String
     let image: String
-    let subtitle, pubDate, director, actor: String
+    let subtitle, pubDate, director, actor: String 
     let userRating: String
 }
