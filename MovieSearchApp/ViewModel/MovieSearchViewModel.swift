@@ -126,14 +126,14 @@ final class MovieSearchViewModel: ViewModelType {
 
 extension MovieSearchViewModel {
 
-    func getMovieData(query: String, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
+    func getMovieData(query: String, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
         total = 0
         start = 1
         APIManager.shared.getMovieData(query: query, start: start, display: display, completion: completion)
     }
 
     // 마지막 페이지 확인하고 데이터 Fetch 해주는 Logic
-    func getNextPageMovieData(query: String, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
+    func getNextPageMovieData(query: String, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
         start += 20
         if start + display < total {
             APIManager.shared.getMovieData(query: query, start: start, display: display, completion: completion)

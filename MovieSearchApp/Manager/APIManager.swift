@@ -44,15 +44,16 @@ final class APIManager {
 
     static let shared = APIManager()
 
-    func getMovieData(query: String, start: Int, display: Int, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
+    func getMovieData(query: String, start: Int, display: Int, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
 
         let movieAPI: MovieAPI = .getMovieData(query: query, start: start, display: display)
 
         AF.request(movieAPI.url, method: .get, parameters: movieAPI.parameters, headers: movieAPI.headers).validate()
-            .responseDecodable(of: MovieData.self) { [weak self] response in
+            .responseDecodable(of: MovieDataDTO.self) { [weak self] response in
                 switch response.result {
                 case .success(let data):
-                    completion(.success(data))
+                    let movieData = data.toEntity()
+                    completion(.success(movieData))
                 case .failure(_):
                     guard let statusCode = response.response?.statusCode else { return }
                     guard let error = self?.statusCodeCheck(statusCode: statusCode) else { return }
