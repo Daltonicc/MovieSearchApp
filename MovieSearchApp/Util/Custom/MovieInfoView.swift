@@ -18,26 +18,22 @@ final class MovieInfoView: BaseView {
     }()
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "영화제목"
-        label.font = .boldSystemFont(ofSize: 20)
+        label.font = .boldSystemFont(ofSize: 16)
         return label
     }()
     let directorLabel: UILabel = {
         let label = UILabel()
-        label.text = "감독"
-        label.font = .systemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     let actorLabel: UILabel = {
         let label = UILabel()
-        label.text = "출연"
-        label.font = .systemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     let rateLabel: UILabel = {
         let label = UILabel()
-        label.text = "평점"
-        label.font = .systemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     let favoriteButton: UIButton = {
@@ -68,23 +64,25 @@ final class MovieInfoView: BaseView {
     override func setUpConstraint() {
 
         posterImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
-            make.leading.equalToSuperview().inset(20)
-            make.bottom.equalToSuperview().inset(10)
-            make.width.equalTo(50)
+            make.top.equalToSuperview().inset(5)
+            make.leading.equalToSuperview().inset(10)
+            make.bottom.equalToSuperview().inset(5)
+            make.width.equalTo(60)
         }
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(5)
             make.leading.equalTo(posterImageView.snp.trailing).offset(10)
+            make.trailing.equalTo(favoriteButton.snp.leading).inset(-5)
         }
         directorLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.leading.equalTo(posterImageView.snp.trailing).offset(10)
+            make.trailing.equalTo(favoriteButton.snp.leading).inset(-5)
         }
         actorLabel.snp.makeConstraints { make in
             make.top.equalTo(directorLabel.snp.bottom).offset(10)
             make.leading.equalTo(posterImageView.snp.trailing).offset(10)
-            make.trailing.equalToSuperview().inset(10)
+            make.trailing.equalTo(favoriteButton.snp.leading).inset(-5)
         }
         rateLabel.snp.makeConstraints { make in
             make.top.equalTo(actorLabel.snp.bottom).offset(10)

@@ -20,11 +20,14 @@ final class MovieSearchView: BaseView {
         label.font = .boldSystemFont(ofSize: 25)
         return label
     }()
-    let favoriteButtonListbarButton: UIBarButtonItem = {
-        let barbutton = UIBarButtonItem()
-        let view = FavoriteListButtonView()
-        barbutton.customView = view
-        return barbutton
+    let favoriteButtonListBarButton: UIButton = {
+        let button = UIButton()
+        let viewFrame = CGRect(x: 0, y: 0, width: 90, height: 30)
+        let view = FavoriteListButtonView(frame: viewFrame)
+        view.isUserInteractionEnabled = false
+        button.frame = CGRect(x: 0, y: 0, width: 90, height: 30)
+        button.addSubview(view)
+        return button
     }()
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -35,6 +38,13 @@ final class MovieSearchView: BaseView {
     let movieTableView: UITableView = {
         let tableView = UITableView()
         return tableView
+    }()
+    let noResultLabel: UILabel = {
+        let label = UILabel()
+        label.text = "검색 결과가 없습니다."
+        label.font = .systemFont(ofSize: 30)
+        label.textColor = .systemGray4
+        return label
     }()
 
     override init(frame: CGRect) {
@@ -50,6 +60,7 @@ final class MovieSearchView: BaseView {
         addSubview(titleView)
         addSubview(searchBar)
         addSubview(movieTableView)
+        addSubview(noResultLabel)
 
         titleView.addSubview(titleLabel)
     }
@@ -61,12 +72,14 @@ final class MovieSearchView: BaseView {
             make.leading.trailing.equalToSuperview().inset(10)
         }
         movieTableView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(10)
+            make.top.equalTo(searchBar.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview().inset(10)
         }
-
         titleLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        noResultLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
 }
