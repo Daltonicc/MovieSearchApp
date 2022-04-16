@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import RealmSwift
 
 final class MovieSearchViewModel: ViewModelType {
 
@@ -15,7 +16,7 @@ final class MovieSearchViewModel: ViewModelType {
         let requestMovieListEvent: Signal<String>
         let requestNextPageMovieListEvent: Signal<String>
         let pressFavoriteButtonList: Signal<Void>
-        let pressFavoriteButton: Signal<Bool>
+        let pressFavoriteButton: Signal<Int>
         let pressMovieItem: Signal<Int>
     }
 
@@ -23,7 +24,7 @@ final class MovieSearchViewModel: ViewModelType {
         let failToastAction: Signal<String>
         let indicatorAction: Driver<Bool>
         let didLoadMovieData: Driver<[MovieItem]>
-        let didLoadFavoirteView: Signal<Void>
+        let didLoadFavoriteView: Signal<Void>
         let noResultAction: Driver<Bool>
         let didPressFavoriteButton: Driver<Bool>
         let didPressMovieItem: Signal<MovieItem>
@@ -43,7 +44,14 @@ final class MovieSearchViewModel: ViewModelType {
     private var display = 20
     private var total = 0
 
+    // Database
+    private let localRealm = try! Realm()
+    private var favoriteMovieList: Results<FavoriteMovieList>! {
+        return RealmManager.shared.loadListData()
+    }
+
     var totalMovieData: [MovieItem] = []
+    var favoriteMovieData: [MovieItem] = []
 
     func transform(input: Input) -> Output {
 
@@ -55,6 +63,7 @@ final class MovieSearchViewModel: ViewModelType {
                     switch response {
                     case .success(let data):
                         let noResultCheck = self.checkNoResult(movieItem: data.items)
+                        self.total = data.total
                         self.appendData(movieItem: data.items)
                         self.didLoadMovieData.accept(self.totalMovieData)
                         self.noResultAction.accept(noResultCheck)
@@ -87,6 +96,14 @@ final class MovieSearchViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        input.pressFavoriteButton
+            .emit { [weak self] row in
+                guard let self = self else { return }
+                let isFavorite = self.checkFavoriteList(row: row)
+                self.didPressFavoriteButton.accept(isFavorite)
+            }
+            .disposed(by: disposeBag)
+
         input.pressMovieItem
             .emit { [weak self] row in
                 guard let self = self else { return }
@@ -98,7 +115,7 @@ final class MovieSearchViewModel: ViewModelType {
             failToastAction: failToastAction.asSignal(),
             indicatorAction: indicatorAction.asDriver(),
             didLoadMovieData: didLoadMovieData.asDriver(),
-            didLoadFavoirteView: didLoadFavoriteView.asSignal(),
+            didLoadFavoriteView: didLoadFavoriteView.asSignal(),
             noResultAction: noResultAction.asDriver(),
             didPressFavoriteButton: didPressFavoriteButton.asDriver(),
             didPressMovieItem: didPressMovieItem.asSignal()
@@ -133,6 +150,38 @@ extension MovieSearchViewModel {
         } else {
             return true
         }
+    }
+
+    func checkFavoriteList(row: Int) -> Bool {
+
+        let filterValue = favoriteMovieList.filter { $0.title == self.totalMovieData[row].title }
+        if filterValue.count == 0 {
+            addToDataBase(movieItem: totalMovieData[row])
+            return true
+        } else {
+            for i in 0..<favoriteMovieList.count {
+                if favoriteMovieList[i].title == totalMovieData[row].title {
+                    removeFromDataBase(movieItem: favoriteMovieList[i])
+                    return false
+                }
+            }
+        }
+        return false
+    }
+
+    func addToDataBase(movieItem: MovieItem) {
+        let task = FavoriteMovieList(title: movieItem.title,
+                                     link: movieItem.link,
+                                     image: movieItem.image,
+                                     director: movieItem.director,
+                                     actor: movieItem.actor,
+                                     userRating: movieItem.userRating,
+                                     isFavorite: true)
+        RealmManager.shared.saveMovieListData(with: task)
+    }
+
+    func removeFromDataBase(movieItem: FavoriteMovieList) {
+        RealmManager.shared.deleteObjectData(object: movieItem)
     }
 
     func appendData(movieItem: [MovieItem]) {
