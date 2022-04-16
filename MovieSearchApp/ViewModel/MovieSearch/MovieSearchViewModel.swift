@@ -13,6 +13,7 @@ final class MovieSearchViewModel: ViewModelType {
 
     struct Input {
         let requestMovieListEvent: Signal<String>
+        let requestNextPageMovieListEvent: Signal<String>
         let pressFavoriteButtonList: Signal<Void>
     }
 
@@ -32,15 +33,40 @@ final class MovieSearchViewModel: ViewModelType {
 
     var disposeBag = DisposeBag()
 
+    var start = 1
+    var display = 20
+    var total = 0
+
+    var totalMovieData: [MovieItem] = []
+
     func transform(input: Input) -> Output {
 
         input.requestMovieListEvent
             .emit { [weak self] query in
                 guard let self = self else { return }
+                self.totalMovieData.removeAll()
                 self.getMovieData(query: query) { response in
                     switch response {
                     case .success(let data):
-                        self.didLoadMovieData.accept(data.items)
+                        self.total = data.total
+                        self.appendData(movieItem: data.items)
+                        self.didLoadMovieData.accept(self.totalMovieData)
+                    case .failure(let error):
+                        self.failToastAction.accept(error.errorDescription!)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+
+        input.requestNextPageMovieListEvent
+            .emit { [weak self] query in
+                guard let self = self else { return }
+                print("input")
+                self.getNextPageMovieData(query: query) { response in
+                    switch response {
+                    case .success(let data):
+                        self.appendData(movieItem: data.items)
+                        self.didLoadMovieData.accept(self.totalMovieData)
                     case .failure(let error):
                         self.failToastAction.accept(error.errorDescription!)
                     }
@@ -68,8 +94,26 @@ final class MovieSearchViewModel: ViewModelType {
 extension MovieSearchViewModel {
 
     func getMovieData(query: String, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
-        let start = 1
-        let display = 20
+        total = 0
+        start = 1
+        display = 20
         APIManager.shared.getMovieData(query: query, start: start, display: display, completion: completion)
+    }
+
+    func getNextPageMovieData(query: String, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
+        start += 20
+        if start + display < total {
+            APIManager.shared.getMovieData(query: query, start: start, display: display, completion: completion)
+        } else if start + display >= total && start < total {
+            APIManager.shared.getMovieData(query: query, start: start, display: total - start, completion: completion)
+        } else {
+            return
+        }
+    }
+
+    func appendData(movieItem: [MovieItem]) {
+        for i in movieItem {
+            totalMovieData.append(i)
+        }
     }
 }

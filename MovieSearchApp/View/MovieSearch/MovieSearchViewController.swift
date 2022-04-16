@@ -14,6 +14,7 @@ final class MovieSearchViewController: BaseViewController {
 
     private lazy var input = MovieSearchViewModel.Input(
         requestMovieListEvent: requestMovieListEvent.asSignal(),
+        requestNextPageMovieListEvent: requestNextPageMovieListEvent.asSignal(),
         pressFavoriteButtonList: pressFavoriteButtonList.asSignal()
         )
     private lazy var output = viewModel.transform(input: input)
@@ -23,6 +24,7 @@ final class MovieSearchViewController: BaseViewController {
     private let disposeBag = DisposeBag()
 
     private let requestMovieListEvent = PublishRelay<String>()
+    private let requestNextPageMovieListEvent = PublishRelay<String>()
     private let pressFavoriteButtonList = PublishRelay<Void>()
 
     override func loadView() {
@@ -58,6 +60,7 @@ final class MovieSearchViewController: BaseViewController {
         output.didLoadMovieData
             .drive(mainView.movieTableView.rx.items(cellIdentifier: MovieTableViewCell.identifier, cellType: MovieTableViewCell.self)) { (row, element, cell) in
                 cell.cellConfig(movieItem: element)
+                self.checkLastElement(row: row, element: self.viewModel.totalMovieData)
             }
             .disposed(by: disposeBag)
 
@@ -81,6 +84,13 @@ final class MovieSearchViewController: BaseViewController {
         favoriteView.modalTransitionStyle = .coverVertical
         favoriteView.modalPresentationStyle = .fullScreen
         self.present(favoriteView, animated: true, completion: nil)
+    }
+
+    private func checkLastElement(row: Int, element: [MovieItem]) {
+        if row == element.count - 1 {
+            guard let query = mainView.searchBar.searchTextField.text else { return }
+            requestNextPageMovieListEvent.accept(query)
+        }
     }
 
     @objc private func favoriteListBarButtonTap(sender: UIButton) {
