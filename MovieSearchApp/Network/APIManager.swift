@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 enum MovieAPI {
-    case getMovieData(query: String, start: String, display: String)
+    case getMovieData(query: String, start: Int, display: Int)
 }
 
 extension MovieAPI {
@@ -23,8 +23,8 @@ extension MovieAPI {
         case .getMovieData(let query, let start, let display):
             return [
                 "query": query,
-                "display": display,
-                "start": start
+                "display": "\(display)",
+                "start": "\(start)"
             ]
         }
     }
@@ -44,12 +44,11 @@ final class APIManager {
 
     static let shared = APIManager()
 
-    func getMovieData(query: String, start: String, display: String, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
+    func getMovieData(query: String, start: Int, display: Int, completion: @escaping (Result<(MovieData), MovieError>) -> Void) {
 
         let movieAPI: MovieAPI = .getMovieData(query: query, start: start, display: display)
 
-        AF.request(movieAPI.url, method: .get, parameters: movieAPI.parameters, headers: movieAPI.headers)
-            .validate()
+        AF.request(movieAPI.url, method: .get, parameters: movieAPI.parameters, headers: movieAPI.headers).validate()
             .responseDecodable(of: MovieData.self) { [weak self] response in
                 switch response.result {
                 case .success(let data):
