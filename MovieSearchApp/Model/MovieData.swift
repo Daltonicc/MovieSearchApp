@@ -17,6 +17,7 @@ struct MovieItem: Codable {
     let title: String
     let link: String
     let image: String
-    let subtitle, pubDate, director, actor: String 
+    let director: String
+    let actor: String
     let userRating: String
 }
