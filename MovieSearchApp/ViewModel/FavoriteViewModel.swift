@@ -43,6 +43,7 @@ final class FavoriteViewModel: ViewModelType {
 
     func transform(input: Input) -> Output {
 
+        // 즐겨찾기 목록 요청 받았을 때
         input.requestFavoriteMovieListEvent
             .emit { [weak self] _ in
                 guard let self = self else { return }
@@ -52,6 +53,7 @@ final class FavoriteViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        // 즐겨찾기 목록에서 제거 요청 받았을 때
         input.requestRemoveFavoriteEvent
             .emit { [weak self] row in
                 guard let self = self else { return }
@@ -62,6 +64,7 @@ final class FavoriteViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        // 즐겨찾기 버튼 눌렀을 때
         input.pressFavoriteButton
             .emit { [weak self] row in
                 guard let self = self else { return }
@@ -69,6 +72,7 @@ final class FavoriteViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        // 셀 클릭했을 때
         input.pressMovieItem
             .emit { [weak self] row in
                 guard let self = self else { return }

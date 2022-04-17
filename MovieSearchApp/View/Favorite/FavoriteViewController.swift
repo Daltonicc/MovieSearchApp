@@ -52,6 +52,7 @@ final class FavoriteViewController: BaseViewController {
 
     override func bind() {
 
+        // 즐겨찾기 목록 호출
         output.didLoadFavoriteMovieList
             .drive(mainView.favoriteMovieTableView.rx.items(cellIdentifier: MovieTableViewCell.identifier, cellType: MovieTableViewCell.self)) { (row, element, cell) in
                 cell.delegate = self
@@ -59,6 +60,7 @@ final class FavoriteViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
 
+        // 즐겨찾기 목록 비었을 때
         output.noResultAction
             .drive { [weak self] bool in
                 guard let self = self else { return }
@@ -66,6 +68,7 @@ final class FavoriteViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
 
+        // 셀 클릭하고 이벤트 받은 뒤 이벤트.
         output.didPressMovieItem
             .emit { [weak self] item in
                 guard let self = self else { return }
@@ -73,6 +76,7 @@ final class FavoriteViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
 
+        // 즐겨찾기 버튼 눌렀을 때
         output.didPressFavoriteButton
             .emit { [weak self] row in
                 guard let self = self else { return }
@@ -80,6 +84,7 @@ final class FavoriteViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
 
+        // 셀 클릭했을 때
         mainView.favoriteMovieTableView.rx.itemSelected
             .bind { [weak self] indexPath in
                 guard let self = self else { return }

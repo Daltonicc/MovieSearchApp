@@ -50,6 +50,7 @@ final class DetailViewController: BaseViewController {
 
     override func bind() {
 
+        // 즐겨찾기 버튼 클릭시
         output.didPressFavoriteButton
             .emit { [weak self] _ in
                 guard let self = self else { return }

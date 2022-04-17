@@ -50,6 +50,7 @@ final class MovieSearchViewModel: ViewModelType {
 
     func transform(input: Input) -> Output {
 
+        // 영화 리스트 요청 받았을 때
         input.requestMovieListEvent
             .emit { [weak self] query in
                 guard let self = self else { return }
@@ -70,6 +71,7 @@ final class MovieSearchViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        // 다음 페이지 리스트 요청 받았을 때 - 페이지네이션
         input.requestNextPageMovieListEvent
             .emit { [weak self] query in
                 guard let self = self else { return }
@@ -85,6 +87,7 @@ final class MovieSearchViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        // 즐겨찾기 목록 이동 버튼 눌렀을 때
         input.pressFavoriteButtonList
             .emit { [weak self] _ in
                 guard let self = self else { return }
@@ -92,6 +95,7 @@ final class MovieSearchViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        // 즐겨찾기 버튼 눌렀을 때
         input.pressFavoriteButton
             .emit { [weak self] row in
                 guard let self = self else { return }
@@ -101,6 +105,7 @@ final class MovieSearchViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        // 셀 클릭했을 때
         input.pressMovieItem
             .emit { [weak self] row in
                 guard let self = self else { return }

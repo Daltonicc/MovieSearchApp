@@ -30,6 +30,7 @@ final class DetailViewModel: ViewModelType {
 
     func transform(input: Input) -> Output {
 
+        // 즐겨찾기 버튼 눌렀을 때
         input.pressFavoriteButton
             .emit { [weak self] item in
                 guard let self = self else { return }
