@@ -12,7 +12,6 @@ struct MovieData {
     let items: [MovieItem]
 }
 
-
 struct MovieItem {
     let title: String
     let link: String
@@ -20,5 +19,5 @@ struct MovieItem {
     let director: String
     let actor: String
     let userRating: String
-    let isFavorite: Bool
+    var isFavorite: Bool
 }
