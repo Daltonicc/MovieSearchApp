@@ -21,21 +21,19 @@ final class FavoriteViewModel: ViewModelType {
 
     struct Output {
         let didLoadFavoriteMovieList: Driver<[MovieItem]>
-        let indicatorAction: Driver<Bool>
         let noResultAction: Driver<Bool>
         let didPressFavoriteButton: Signal<Int>
         let didPressMovieItem: Signal<MovieItem>
     }
 
     private let didLoadFavoriteMovieList = BehaviorRelay<[MovieItem]>(value: [])
-    private let indicatorAction = BehaviorRelay<Bool>(value: false)
     private let noResultAction = BehaviorRelay<Bool>(value: true)
     private let didPressFavoriteButton = PublishRelay<Int>()
     private let didPressMovieItem = PublishRelay<MovieItem>()
 
     var disposeBag = DisposeBag()
 
-    private var favoriteMovieData: [MovieItem] = []
+    var favoriteMovieData: [MovieItem] = []
 
     // Database
     private let localRealm = try! Realm()
@@ -49,6 +47,7 @@ final class FavoriteViewModel: ViewModelType {
             .emit { [weak self] _ in
                 guard let self = self else { return }
                 self.getFavoriteMovieData()
+                self.noResultAction.accept(self.checkEmptyList())
                 self.didLoadFavoriteMovieList.accept(self.favoriteMovieData)
             }
             .disposed(by: disposeBag)
@@ -58,6 +57,7 @@ final class FavoriteViewModel: ViewModelType {
                 guard let self = self else { return }
                 self.removeFavoriteData(row: row)
                 self.getFavoriteMovieData()
+                self.noResultAction.accept(self.checkEmptyList())
                 self.didLoadFavoriteMovieList.accept(self.favoriteMovieData)
             }
             .disposed(by: disposeBag)
@@ -78,7 +78,6 @@ final class FavoriteViewModel: ViewModelType {
 
         return Output(
             didLoadFavoriteMovieList: didLoadFavoriteMovieList.asDriver(),
-            indicatorAction: indicatorAction.asDriver(),
             noResultAction: noResultAction.asDriver(),
             didPressFavoriteButton: didPressFavoriteButton.asSignal(),
             didPressMovieItem: didPressMovieItem.asSignal()
@@ -100,6 +99,10 @@ extension FavoriteViewModel {
                                  isFavorite: favoriteMovieList[i].isFavorite)
             favoriteMovieData.append(data)
         }
+    }
+
+    func checkEmptyList() -> Bool {
+        favoriteMovieData.count == 0 ? false : true
     }
 
     func removeFavoriteData(row: Int) {

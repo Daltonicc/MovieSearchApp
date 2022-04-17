@@ -28,11 +28,16 @@ final class MovieSearchViewController: BaseViewController {
     private let requestMovieListEvent = PublishRelay<String>()
     private let requestNextPageMovieListEvent = PublishRelay<String>()
     private let pressFavoriteButtonList = PublishRelay<Void>()
-    private let pressFavoriteButton = PublishRelay<Bool>()
+    private let pressFavoriteButton = PublishRelay<Int>()
     private let pressMovieItem = PublishRelay<Int>()
 
     override func loadView() {
         self.view = mainView
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        requestQuery()
     }
 
     override func viewDidLoad() {
@@ -41,7 +46,7 @@ final class MovieSearchViewController: BaseViewController {
 
     override func setViewConfig() {
         super.setViewConfig()
-
+        
         mainView.movieTableView.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifier)
         mainView.movieTableView.keyboardDismissMode = .onDrag
         mainView.movieTableView.rowHeight = 110
@@ -63,13 +68,14 @@ final class MovieSearchViewController: BaseViewController {
         // Fetch 영화 데이터
         output.didLoadMovieData
             .drive(mainView.movieTableView.rx.items(cellIdentifier: MovieTableViewCell.identifier, cellType: MovieTableViewCell.self)) { (row, element, cell) in
-                cell.cellConfig(movieItem: element)
+                cell.delegate = self
+                cell.cellConfig(movieItem: element, tag: row)
                 self.checkLastElement(row: row, element: self.viewModel.totalMovieData)
             }
             .disposed(by: disposeBag)
 
         // Favorite 뷰 이동
-        output.didLoadFavoirteView
+        output.didLoadFavoriteView
             .emit { [weak self] _ in
                 guard let self = self else { return }
                 self.showFavoriteView()
@@ -92,11 +98,18 @@ final class MovieSearchViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
 
+        output.didPressFavoriteButton
+            .emit { [weak self] _ in
+                guard let self = self else { return }
+                
+            }
+            .disposed(by: disposeBag)
+
         // 셀 클릭 후 이동
         output.didPressMovieItem
             .emit { [weak self] item in
                 guard let self = self else { return }
-                self.showDetailView()
+                self.showDetailView(item: item)
             }
             .disposed(by: disposeBag)
 
@@ -112,17 +125,17 @@ final class MovieSearchViewController: BaseViewController {
     // showFavoriteView
     private func showFavoriteView() {
         let favoriteView = FavoriteViewController()
-        favoriteView.modalTransitionStyle = .coverVertical
         favoriteView.modalPresentationStyle = .fullScreen
-        self.present(favoriteView, animated: true, completion: nil)
+        navigationController?.pushViewController(favoriteView, animated: true)
+
     }
 
     // showDetailView
-    private func showDetailView() {
+    private func showDetailView(item: MovieItem) {
         let detailView = DetailViewController()
-        detailView.modalTransitionStyle = .coverVertical
         detailView.modalPresentationStyle = .fullScreen
-        self.present(detailView, animated: true, completion: nil)
+        detailView.movieItem = item
+        navigationController?.pushViewController(detailView, animated: true)
     }
 
     // Pagination
@@ -133,6 +146,13 @@ final class MovieSearchViewController: BaseViewController {
         }
     }
 
+    private func requestQuery() {
+        guard let query = mainView.searchBar.searchTextField.text else { return }
+        if query.count != 0 {
+            requestMovieListEvent.accept(query)
+        }
+    }
+
     @objc private func favoriteListBarButtonTap(sender: UIButton) {
         addPressAnimationToButton(scale: 0.95, mainView.favoriteButtonListBarButton) { [weak self] _ in
             self?.pressFavoriteButtonList.accept(())
@@ -140,9 +160,14 @@ final class MovieSearchViewController: BaseViewController {
     }
 }
 
+extension MovieSearchViewController: MovieTableViewCellDelegate {
+    func didTapFavoriteButton(tag: Int, status: Bool) {
+        pressFavoriteButton.accept(tag)
+    }
+}
+
 extension MovieSearchViewController: UISearchBarDelegate, UISearchTextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
         guard let query = mainView.searchBar.searchTextField.text else { return true }
         requestMovieListEvent.accept(query)
         return true
