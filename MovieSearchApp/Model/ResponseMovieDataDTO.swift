@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieDataDTO: Codable {
+struct ResponseMovieDataDTO: Codable {
     let lastBuildDate: String
     let total, start, display: Int
     let items: [Item]
@@ -22,7 +22,7 @@ struct Item: Codable {
     let userRating: String
 }
 
-extension MovieDataDTO {
+extension ResponseMovieDataDTO {
     func toEntity() -> MovieData {
         return .init(total: total,
                      start: start,
