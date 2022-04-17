@@ -15,7 +15,6 @@ final class MovieSearchViewModel: ViewModelType {
     struct Input {
         let requestMovieListEvent: Signal<String>
         let requestNextPageMovieListEvent: Signal<String>
-        let requestFavoriteMovieListEvent: Signal<Void>
         let pressFavoriteButtonList: Signal<Void>
         let pressFavoriteButton: Signal<Int>
         let pressMovieItem: Signal<Int>
@@ -45,14 +44,13 @@ final class MovieSearchViewModel: ViewModelType {
     private var display = 20
     private var total = 0
 
+    var totalMovieData: [MovieItem] = []
+
     // Database
     private let localRealm = try! Realm()
     private var favoriteMovieList: Results<FavoriteMovieList>! {
         return RealmManager.shared.loadListData()
     }
-
-    var totalMovieData: [MovieItem] = []
-    var favoriteMovieData: [MovieItem] = []
 
     func transform(input: Input) -> Output {
 
@@ -66,6 +64,7 @@ final class MovieSearchViewModel: ViewModelType {
                         let noResultCheck = self.checkNoResult(movieItem: data.items)
                         self.total = data.total
                         self.appendData(movieItem: data.items)
+                        self.checkMovieList()
                         self.didLoadMovieData.accept(self.totalMovieData)
                         self.noResultAction.accept(noResultCheck)
                     case .failure(let error):
@@ -153,15 +152,26 @@ extension MovieSearchViewModel {
         }
     }
 
-    func checkFavoriteList(row: Int) {
+    // 검색한 영화리스트에서 즐겨찾기 목록에 있는지 확인해주고 있다면 isFavorite을 True로 바꿔주는 메서드
+    func checkMovieList() {
+        for i in 0..<totalMovieData.count {
+            let filterValue = favoriteMovieList.filter ("title CONTAINS[c] '\(self.totalMovieData[i].title)'")
+            if filterValue.count == 1 {
+                totalMovieData[i].isFavorite = true
+            }
+        }
+    }
 
-        let filterValue = favoriteMovieList.filter { $0.title == self.totalMovieData[row].title }
+    // 즐겨찾기 DB 목록에 있는지 확인하고 있으면 삭제, 없으면 등록하는 Logic
+    func checkFavoriteList(row: Int) {
+        let filterValue = favoriteMovieList.filter ("title CONTAINS[c] '\(self.totalMovieData[row].title)'")
         if filterValue.count == 0 {
             addToDataBase(movieItem: totalMovieData[row])
         } else {
             for i in 0..<favoriteMovieList.count {
                 if favoriteMovieList[i].title == totalMovieData[row].title {
                     removeFromDataBase(movieItem: favoriteMovieList[i])
+                    return
                 }
             }
         }
