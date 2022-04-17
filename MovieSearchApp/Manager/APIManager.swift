@@ -49,7 +49,7 @@ final class APIManager {
         let movieAPI: MovieAPI = .getMovieData(query: query, start: start, display: display)
 
         AF.request(movieAPI.url, method: .get, parameters: movieAPI.parameters, headers: movieAPI.headers).validate()
-            .responseDecodable(of: MovieDataDTO.self) { [weak self] response in
+            .responseDecodable(of: ResponseMovieDataDTO.self) { [weak self] response in
                 switch response.result {
                 case .success(let data):
                     let movieData = data.toEntity()
