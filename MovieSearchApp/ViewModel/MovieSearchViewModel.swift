@@ -125,14 +125,14 @@ final class MovieSearchViewModel: ViewModelType {
 
 extension MovieSearchViewModel {
 
-    func getMovieData(query: String, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
+    private func getMovieData(query: String, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
         total = 0
         start = 1
         APIManager.shared.getMovieData(query: query, start: start, display: display, completion: completion)
     }
 
     // 마지막 페이지 확인하고 데이터 Fetch 해주는 Logic
-    func getNextPageMovieData(query: String, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
+    private func getNextPageMovieData(query: String, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
         start += 20
         if start + display < total {
             APIManager.shared.getMovieData(query: query, start: start, display: display, completion: completion)
@@ -144,7 +144,7 @@ extension MovieSearchViewModel {
     }
 
     // 결과값 있는지, 없는지 확인하는 Logic
-    func checkNoResult(movieItem: [MovieItem]) -> Bool {
+    private func checkNoResult(movieItem: [MovieItem]) -> Bool {
         if movieItem.count == 0 {
             return false
         } else {
@@ -153,7 +153,7 @@ extension MovieSearchViewModel {
     }
 
     // 검색한 영화리스트에서 즐겨찾기 목록에 있는지 확인해주고 있다면 isFavorite을 True로 바꿔주는 메서드
-    func checkMovieList() {
+    private func checkMovieList() {
         for i in 0..<totalMovieData.count {
             let filterValue = favoriteMovieList.filter ("title = '\(self.totalMovieData[i].title)'")
             if filterValue.count == 1 {
@@ -163,7 +163,7 @@ extension MovieSearchViewModel {
     }
 
     // 즐겨찾기 DB 목록에 있는지 확인하고 있으면 삭제, 없으면 등록하는 Logic
-    func checkFavoriteList(row: Int) {
+    private func checkFavoriteList(row: Int) {
         let filterValue = favoriteMovieList.filter ("title = '\(self.totalMovieData[row].title)'")
         if filterValue.count == 0 {
             addToDataBase(movieItem: totalMovieData[row])
@@ -177,7 +177,7 @@ extension MovieSearchViewModel {
         }
     }
 
-    func addToDataBase(movieItem: MovieItem) {
+    private func addToDataBase(movieItem: MovieItem) {
         let task = FavoriteMovieList(title: movieItem.title,
                                      link: movieItem.link,
                                      image: movieItem.image,
@@ -188,11 +188,11 @@ extension MovieSearchViewModel {
         RealmManager.shared.saveMovieListData(with: task)
     }
 
-    func removeFromDataBase(movieItem: FavoriteMovieList) {
+    private func removeFromDataBase(movieItem: FavoriteMovieList) {
         RealmManager.shared.deleteObjectData(object: movieItem)
     }
 
-    func appendData(movieItem: [MovieItem]) {
+    private func appendData(movieItem: [MovieItem]) {
         for i in movieItem {
             totalMovieData.append(i)
         }

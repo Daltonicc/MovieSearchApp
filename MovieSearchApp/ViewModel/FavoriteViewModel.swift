@@ -91,7 +91,7 @@ final class FavoriteViewModel: ViewModelType {
 
 extension FavoriteViewModel {
 
-    func getFavoriteMovieData() {
+    private func getFavoriteMovieData() {
         favoriteMovieData.removeAll()
         for i in 0..<favoriteMovieList.count {
             let data = MovieItem(title: favoriteMovieList[i].title,
@@ -105,11 +105,11 @@ extension FavoriteViewModel {
         }
     }
 
-    func checkEmptyList() -> Bool {
+    private func checkEmptyList() -> Bool {
         favoriteMovieData.count == 0 ? false : true
     }
 
-    func removeFavoriteData(row: Int) {
+    private func removeFavoriteData(row: Int) {
         RealmManager.shared.deleteListData(index: row)
     }
 }

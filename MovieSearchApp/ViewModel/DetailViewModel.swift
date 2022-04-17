@@ -60,7 +60,7 @@ extension DetailViewModel {
         }
     }
 
-    func addToDataBase(movieItem: MovieItem) {
+    private func addToDataBase(movieItem: MovieItem) {
         let task = FavoriteMovieList(title: movieItem.title,
                                      link: movieItem.link,
                                      image: movieItem.image,
@@ -71,7 +71,7 @@ extension DetailViewModel {
         RealmManager.shared.saveMovieListData(with: task)
     }
 
-    func removeFromDataBase(movieItem: FavoriteMovieList) {
+    private func removeFromDataBase(movieItem: FavoriteMovieList) {
         RealmManager.shared.deleteObjectData(object: movieItem)
     }
     
