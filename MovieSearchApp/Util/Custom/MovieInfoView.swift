@@ -13,7 +13,8 @@ final class MovieInfoView: BaseView {
     let posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
-        imageView.image = UIImage(systemName: "star")
+        imageView.image = UIImage(systemName: "doc.text.image")
+        imageView.tintColor = .systemGray3
         return imageView
     }()
     let titleLabel: UILabel = {
