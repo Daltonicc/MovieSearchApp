@@ -7,6 +7,7 @@
 - Portrait 모드만 지원
 - MVVM - Input/Output 패턴 적용
 - Storyboard를 활용하지 않고 코드로만 UI 구성
+- Pagination 구현
 - [개발 공수](https://maze-mozzarella-6e5.notion.site/bfa4e5ece7df44108a19e8f1a63bcbc1)
 
 ## Getting Started
