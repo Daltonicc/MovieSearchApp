@@ -98,13 +98,6 @@ final class MovieSearchViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
 
-        output.didPressFavoriteButton
-            .emit { [weak self] _ in
-                guard let self = self else { return }
-                
-            }
-            .disposed(by: disposeBag)
-
         // 셀 클릭 후 이동
         output.didPressMovieItem
             .emit { [weak self] item in
@@ -161,7 +154,7 @@ final class MovieSearchViewController: BaseViewController {
 }
 
 extension MovieSearchViewController: MovieTableViewCellDelegate {
-    func didTapFavoriteButton(tag: Int, status: Bool) {
+    func didTapFavoriteButton(tag: Int) {
         pressFavoriteButton.accept(tag)
     }
 }
@@ -170,6 +163,7 @@ extension MovieSearchViewController: UISearchBarDelegate, UISearchTextFieldDeleg
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let query = mainView.searchBar.searchTextField.text else { return true }
         requestMovieListEvent.accept(query)
+        textField.resignFirstResponder()
         return true
     }
 }
