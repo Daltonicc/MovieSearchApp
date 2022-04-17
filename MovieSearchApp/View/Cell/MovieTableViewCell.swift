@@ -10,7 +10,7 @@ import SnapKit
 import Kingfisher
 
 protocol MovieTableViewCellDelegate: AnyObject {
-    func didTapFavoriteButton(tag: Int, status: Bool)
+    func didTapFavoriteButton(tag: Int)
 }
 
 final class MovieTableViewCell: UITableViewCell {
@@ -38,12 +38,11 @@ final class MovieTableViewCell: UITableViewCell {
     }
 
     private func setUpView() {
-        
         contentView.addSubview(cellView)
     }
 
     private func setUpConstraints() {
-
+        
         cellView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -54,7 +53,7 @@ final class MovieTableViewCell: UITableViewCell {
         if let imageurl = URL(string: movieItem.image) {
             cellView.posterImageView.kf.setImage(with: imageurl)
         } else {
-            cellView.posterImageView.image = UIImage(systemName: "star")
+            cellView.posterImageView.image = UIImage(systemName: "doc.text.image")
         }
         
         let title = movieItem.title
@@ -87,7 +86,7 @@ final class MovieTableViewCell: UITableViewCell {
             guard let self = self else { return }
             self.isFavorite.toggle()
             self.cellView.favoriteButton.tintColor = self.isFavorite ? .systemYellow : .systemGray3
-            self.delegate?.didTapFavoriteButton(tag: sender.tag, status: self.isFavorite)
+            self.delegate?.didTapFavoriteButton(tag: sender.tag)
         }
     }
 }
