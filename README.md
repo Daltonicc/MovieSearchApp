@@ -21,10 +21,44 @@
 
 ### Issue
 
-#### UIView를 customView로 적용한 UIBarButtonItem 타겟과 액션 미적용 이슈
+#### 1. UIView를 customView로 적용한 UIBarButtonItem 타겟과 액션 미적용 이슈
 * UIBarButtonItem에 UIView를 커스텀뷰로 적용해서 초기화해준 뒤, 타겟과 액션을 추가했지만 작동하지 않는 이슈가 존재했다.
 * [확인 결과](https://stackoverflow.com/questions/2796438/uibarbuttonitem-target-action-not-working), UIBarButtonItem은 UIView를 커스텀뷰로 적용했을 때 타겟과 액션을 허용하지 않는다고 한다.
-* UIButton에
+* UIButton에 커스텀뷰를 적용시켜줬고 커스텀 UIButton을 다시 UIBarButtonItem에 커스텀뷰로 초기화해준 뒤 타겟과 액션을 적용했다.
+
+```swift
+
+    override func navigationItemConfig() {
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: mainView.titleView)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: mainView.favoriteButtonListBarButton)
+        mainView.favoriteButtonListBarButton.addTarget(self, action: #selector(favoriteListBarButtonTap(sender:)), for: .touchUpInside)
+    }
+    
+```
+
+#### 2. 데이터베이스 데이터 삭제 후 생기는 index out of bounds 이슈
+    
+* 데이터베이스에서 데이터를 삭제하고 나면 바로 런타임 에러가 발생했다.
+* 원인을 찾아보니 삭제한 뒤에도 for문이 배열을 끝까지 돌아서 생긴 문제였다.
+* 삭제에 성공했으면 조기 return으로 해결했다.
+    
+```swift
+// 즐겨찾기 DB 목록에 있는지 확인하고 있으면 삭제, 없으면 등록하는 Logic
+private func checkFavoriteList(row: Int) {
+    let filterValue = favoriteMovieList.filter ("title = '\(self.totalMovieData[row].title)'")
+    if filterValue.count == 0 {
+        addToDataBase(movieItem: totalMovieData[row])
+    } else {
+        for i in 0..<favoriteMovieList.count {
+            if favoriteMovieList[i].title == totalMovieData[row].title {
+                removeFromDataBase(movieItem: favoriteMovieList[i])
+                return
+            }
+        }
+    }
+}
+```
 
 ### Reflection
 
@@ -49,4 +83,12 @@
 *****
 
 ## ScreenShot
+<div markdown="1">  
+    <div align = "center">
+    <img src="https://user-images.githubusercontent.com/87598209/163730476-56eb04cf-0a8d-4f70-b09c-8b4665c2ec61.png" width="200px" height="400px"></img>
+    <img src="https://user-images.githubusercontent.com/87598209/163730477-dcd57b91-f827-413e-a13f-45aef75306d6.png" width="200px" height="400px"></img>
+    <img src="https://user-images.githubusercontent.com/87598209/163730478-33c40066-96f3-4d22-91c8-f1594da62adf.png" width="200px" height="400px"></img>
+</div>
 
+## Video
+### [iPhone SE](https://youtu.be/A8rkdZdQSMQ)
