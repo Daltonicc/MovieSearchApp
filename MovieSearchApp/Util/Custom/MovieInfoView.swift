@@ -19,6 +19,7 @@ final class MovieInfoView: BaseView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 16)
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     let directorLabel: UILabel = {

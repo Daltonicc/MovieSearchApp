@@ -19,6 +19,13 @@ final class FavoriteView: BaseView {
         let tableView = UITableView()
         return tableView
     }()
+    let noResultLabel: UILabel = {
+        let label = UILabel()
+        label.text = "즐겨찾기한 영화가 없습니다."
+        label.font = .systemFont(ofSize: 30)
+        label.textColor = .systemGray4
+        return label
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,6 +38,7 @@ final class FavoriteView: BaseView {
     override func setUpView() {
         addSubview(separateView)
         addSubview(favoriteMovieTableView)
+        addSubview(noResultLabel)
     }
 
     override func setUpConstraint() {
@@ -44,6 +52,9 @@ final class FavoriteView: BaseView {
             make.top.equalTo(separateView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(10)
             make.bottom.equalToSuperview()
+        }
+        noResultLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
 }

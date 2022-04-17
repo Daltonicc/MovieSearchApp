@@ -31,7 +31,7 @@ final class MovieSearchView: BaseView {
     }()
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = ""
+        searchBar.placeholder = "검색어를 입력해주세요"
         searchBar.searchBarStyle = .minimal
         return searchBar
     }()
