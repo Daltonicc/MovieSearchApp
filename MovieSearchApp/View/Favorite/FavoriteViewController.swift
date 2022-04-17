@@ -32,9 +32,14 @@ final class FavoriteViewController: BaseViewController {
         self.view = mainView
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        requestFavoriteMovieListEvent.accept(())
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        requestFavoriteMovieListEvent.accept(())
+
     }
 
     override func setViewConfig() {
