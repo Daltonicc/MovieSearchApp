@@ -9,9 +9,6 @@ import Foundation
 import RealmSwift
 
 final class RealmManager {
-    private init() {
-        print(localRealm.configuration.fileURL)
-    }
 
     static let shared = RealmManager()
     
