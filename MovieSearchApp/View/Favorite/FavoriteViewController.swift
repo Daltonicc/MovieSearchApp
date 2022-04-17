@@ -34,13 +34,11 @@ final class FavoriteViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         requestFavoriteMovieListEvent.accept(())
     }
 
     override func setViewConfig() {
         super.setViewConfig()
-
         mainView.favoriteMovieTableView.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifier)
         mainView.favoriteMovieTableView.rowHeight = 110
     }
@@ -103,6 +101,7 @@ final class FavoriteViewController: BaseViewController {
             self?.viewModel.favoriteMovieData[row].isFavorite.toggle()
             self?.requestFavoriteMovieListEvent.accept(())
         }
+        cancel.setValue(UIColor.red, forKey: "titleTextColor")
         let ok = UIAlertAction(title: "확인", style: .default) { [weak self] action in
             self?.requestRemoveFavoriteEvent.accept(row)
         }
@@ -117,7 +116,7 @@ final class FavoriteViewController: BaseViewController {
 }
 
 extension FavoriteViewController: MovieTableViewCellDelegate {
-    func didTapFavoriteButton(tag: Int, status: Bool) {
+    func didTapFavoriteButton(tag: Int) {
         pressFavoriteButton.accept(tag)
     }
 }
