@@ -111,7 +111,6 @@ final class FavoriteViewController: BaseViewController {
             self?.viewModel.favoriteMovieData[row].isFavorite.toggle()
             self?.requestFavoriteMovieListEvent.accept(())
         }
-        cancel.setValue(UIColor.red, forKey: "titleTextColor")
         let ok = UIAlertAction(title: "확인", style: .default) { [weak self] action in
             self?.requestRemoveFavoriteEvent.accept(row)
         }
