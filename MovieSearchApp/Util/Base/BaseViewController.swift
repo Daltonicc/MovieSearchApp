@@ -17,7 +17,7 @@ class BaseViewController: UIViewController {
     }
 
     func setViewConfig() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
     }
 
     func navigationItemConfig() {}

@@ -12,7 +12,7 @@ class BaseView: UIView, ViewRepresentable {
     let backBarButton: UIBarButtonItem = {
         let barButton = UIBarButtonItem()
         barButton.image = UIImage(systemName: "chevron.left")
-        barButton.tintColor = .black
+        barButton.tintColor = .barButtonColor
         return barButton
     }()
 
