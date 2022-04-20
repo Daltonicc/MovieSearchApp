@@ -43,7 +43,6 @@ final class MovieSearchViewModel: ViewModelType {
     var totalMovieData: [MovieItem] = []
 
     // Database
-    private let localRealm = try! Realm()
     private var favoriteMovieList: Results<FavoriteMovieList>! {
         return RealmManager.shared.loadListData()
     }
@@ -133,7 +132,7 @@ extension MovieSearchViewModel {
 
     // 마지막 페이지 확인하고 데이터 Fetch 해주는 Logic
     private func getNextPageMovieData(query: String, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
-        start += 20
+        start += display
         if start + display < total {
             APIManager.shared.getMovieData(query: query, start: start, display: display, completion: completion)
         } else if start + display >= total && start < total {
