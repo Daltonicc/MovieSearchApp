@@ -14,13 +14,18 @@ final class DetailViewModel: ViewModelType {
 
     struct Input {
         let pressFavoriteButton: Signal<MovieItem>
+        let requestWebView: Signal<MovieItem>
     }
 
     struct Output {
         let didPressFavoriteButton: Signal<Void>
+        let didLoadWebView: Signal<URLRequest>
+        let indicatorAction: Driver<Bool>
     }
 
     private let didPressFavoriteButton = PublishRelay<Void>()
+    private let didLoadWebView = PublishRelay<URLRequest>()
+    private let indicatorAction = BehaviorRelay<Bool>(value: false)
 
     var disposeBag = DisposeBag()
 
@@ -39,13 +44,30 @@ final class DetailViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
 
+        input.requestWebView
+            .emit { [weak self] item in
+                guard let self = self else { return }
+                guard let item = self.webViewConfig(movieItem: item) else { return }
+                self.indicatorAction.accept(true)
+                DispatchQueue.main.async {
+                    self.didLoadWebView.accept(item)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.indicatorAction.accept(false)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+
         return Output(
-            didPressFavoriteButton: didPressFavoriteButton.asSignal()
+            didPressFavoriteButton: didPressFavoriteButton.asSignal(),
+            didLoadWebView: didLoadWebView.asSignal(),
+            indicatorAction: indicatorAction.asDriver()
         )
     }
 }
 
 extension DetailViewModel {
+    
     private func checkFavoriteList(item: MovieItem) {
         let filterValue = favoriteMovieList.filter ("title = '\(item.title)'")
         if filterValue.count == 0 {
@@ -58,6 +80,11 @@ extension DetailViewModel {
                 }
             }
         }
+    }
+
+    private func webViewConfig(movieItem: MovieItem) -> URLRequest? {
+        guard let url = URL(string: movieItem.link) else { return nil }
+        return URLRequest(url: url)
     }
 
     private func addToDataBase(movieItem: MovieItem) {

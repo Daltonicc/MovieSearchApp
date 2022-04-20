@@ -13,7 +13,8 @@ import RxCocoa
 final class DetailViewController: BaseViewController {
 
     private lazy var input = DetailViewModel.Input(
-        pressFavoriteButton: pressFavoriteButton.asSignal()
+        pressFavoriteButton: pressFavoriteButton.asSignal(),
+        requestWebView: requestWebView.asSignal()
     )
     private lazy var output = viewModel.transform(input: input)
 
@@ -22,6 +23,7 @@ final class DetailViewController: BaseViewController {
     private let disposeBag = DisposeBag()
 
     private let pressFavoriteButton = PublishRelay<MovieItem>()
+    private let requestWebView = PublishRelay<MovieItem>()
 
     var movieItem: MovieItem?
 
@@ -34,7 +36,9 @@ final class DetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         topViewConfig()
-        webViewConfig()
+
+        guard let movieItem = movieItem else { return }
+        requestWebView.accept(movieItem)
     }
 
     override func setViewConfig() {
@@ -58,6 +62,21 @@ final class DetailViewController: BaseViewController {
                 self.mainView.movieView.favoriteButton.tintColor = self.isFavorite ? .systemYellow : .systemGray3
             }
             .disposed(by: disposeBag)
+
+        output.didLoadWebView
+            .emit { [weak self] request in
+                guard let self = self else { return }
+                self.mainView.webView.load(request)
+            }
+            .disposed(by: disposeBag)
+
+        output.indicatorAction
+            .drive { [weak self] bool in
+                guard let self = self else { return }
+                self.indicatorAction(bool: bool)
+            }
+            .disposed(by: disposeBag)
+
     }
 
     private func topViewConfig() {
@@ -69,7 +88,7 @@ final class DetailViewController: BaseViewController {
         } else {
             mainView.movieView.posterImageView.image = UIImage(systemName: "doc.text.image")
         }
-        navigationItem.title = title
+        navigationItem.title = movieItem.title
 
         isFavorite = movieItem.isFavorite
 
@@ -80,11 +99,14 @@ final class DetailViewController: BaseViewController {
         mainView.movieView.rateLabel.text = "평점: \(movieItem.userRating)"
     }
 
-    private func webViewConfig() {
-        guard let movieItem = movieItem else { return }
-        guard let url = URL(string: movieItem.link) else { return }
-        let request = URLRequest(url: url)
-        mainView.webView.load(request)
+    private func indicatorAction(bool: Bool) {
+        if bool {
+            mainView.indicatorView.isHidden = false
+            mainView.indicatorView.indicatorView.startAnimating()
+        } else {
+            mainView.indicatorView.isHidden = true
+            mainView.indicatorView.indicatorView.stopAnimating()
+        }
     }
 
     @objc func backButtonClicked(sender: UIBarButtonItem) {
@@ -95,6 +117,7 @@ final class DetailViewController: BaseViewController {
         addPressAnimationToButton(scale: 0.85, mainView.movieView.favoriteButton) { [weak self] _ in
             guard let self = self else { return }
             guard let movieItem = self.movieItem else { return }
+            
             self.pressFavoriteButton.accept(movieItem)
         }
     }

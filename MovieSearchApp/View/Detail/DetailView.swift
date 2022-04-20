@@ -29,6 +29,10 @@ final class DetailView: BaseView {
         view.backgroundColor = .systemGray5
         return view
     }()
+    let indicatorView: IndicatorView = {
+        let indicatorView = IndicatorView()
+        return indicatorView
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,6 +49,7 @@ final class DetailView: BaseView {
         addSubview(movieView)
         addSubview(separateView2)
         addSubview(webView)
+        addSubview(indicatorView)
     }
 
     override func setUpConstraint() {
@@ -67,6 +72,10 @@ final class DetailView: BaseView {
         webView.snp.makeConstraints { make in
             make.top.equalTo(separateView2.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
+        }
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(50)
         }
     }
 }
