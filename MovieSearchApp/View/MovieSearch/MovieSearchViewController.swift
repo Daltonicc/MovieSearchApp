@@ -113,6 +113,19 @@ final class MovieSearchViewController: BaseViewController {
                 self.pressMovieItem.accept(indexPath.row)
             }
             .disposed(by: disposeBag)
+
+        // 1초 단위로 실시간 검색.
+        mainView.searchBar.searchTextField.rx.text
+            .orEmpty
+            .debounce(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .bind { [weak self] query in
+                guard let self = self else { return }
+                if query.count >= 1 {
+                    self.requestMovieListEvent.accept(query)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 
     // showFavoriteView
