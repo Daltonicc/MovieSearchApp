@@ -69,7 +69,7 @@ final class DetailViewModel: ViewModelType {
 extension DetailViewModel {
     
     private func checkFavoriteList(item: MovieItem) {
-        let filterValue = favoriteMovieList.filter ("title = '\(item.title)'")
+        let filterValue = favoriteMovieList.filter ("title = '\(item.title)' AND director = '\(item.director)'")
         if filterValue.count == 0 {
             addToDataBase(movieItem: item)
         } else {

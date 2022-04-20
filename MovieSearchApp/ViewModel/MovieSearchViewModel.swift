@@ -154,7 +154,9 @@ extension MovieSearchViewModel {
     // 검색한 영화리스트에서 즐겨찾기 목록에 있는지 확인해주고 있다면 isFavorite을 True로 바꿔주는 메서드
     private func checkMovieList() {
         for i in 0..<totalMovieData.count {
-            let filterValue = favoriteMovieList.filter ("title = '\(self.totalMovieData[i].title)'")
+            let filterValue = favoriteMovieList.filter (
+                "title = '\(self.totalMovieData[i].title)' AND director = '\(self.totalMovieData[i].director)'"
+            )
             if filterValue.count == 1 {
                 totalMovieData[i].isFavorite = true
             }
@@ -163,7 +165,9 @@ extension MovieSearchViewModel {
 
     // 즐겨찾기 DB 목록에 있는지 확인하고 있으면 삭제, 없으면 등록하는 Logic
     private func checkFavoriteList(row: Int) {
-        let filterValue = favoriteMovieList.filter ("title = '\(self.totalMovieData[row].title)'")
+        let filterValue = favoriteMovieList.filter (
+            "title = '\(self.totalMovieData[row].title)' AND director = '\(self.totalMovieData[row].director)'"
+        )
         if filterValue.count == 0 {
             addToDataBase(movieItem: totalMovieData[row])
         } else {
