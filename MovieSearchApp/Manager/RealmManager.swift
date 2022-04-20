@@ -14,6 +14,8 @@ final class RealmManager {
     
     private let localRealm = try! Realm()
 
+    private init() {}
+
     func saveMovieListData(with list: FavoriteMovieList) {
         try! localRealm.write {
             localRealm.add(list)

@@ -44,6 +44,8 @@ final class APIManager {
 
     static let shared = APIManager()
 
+    private init() {}
+
     func getMovieData(query: String, start: Int, display: Int, completion: @escaping (Result<MovieData, MovieError>) -> Void) {
 
         let movieAPI: MovieAPI = .getMovieData(query: query, start: start, display: display)
