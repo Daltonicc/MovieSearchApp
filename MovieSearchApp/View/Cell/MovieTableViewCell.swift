@@ -55,29 +55,13 @@ final class MovieTableViewCell: UITableViewCell {
         } else {
             cellView.posterImageView.image = UIImage(systemName: "doc.text.image")
         }
-        
-        let title = movieItem.title
-            .replacingOccurrences(of: "<b>", with: "")
-            .replacingOccurrences(of: "</b>", with: "")
-        var director = movieItem.director
-            .replacingOccurrences(of: "|", with: ", ").dropLast()
-        var actor = movieItem.actor
-            .replacingOccurrences(of: "|", with: ", ").dropLast()
-        let rate = movieItem.userRating
-
-        if director.count >= 1 {
-            director.removeLast()
-        }
-        if actor.count >= 1 {
-            actor.removeLast()
-        }
         isFavorite = movieItem.isFavorite
         
         cellView.favoriteButton.tintColor = movieItem.isFavorite ? .systemYellow : .systemGray3
-        cellView.titleLabel.text = title
-        cellView.directorLabel.text = "감독: \(director)"
-        cellView.actorLabel.text = "출연: \(actor)"
-        cellView.rateLabel.text = "평점: \(rate)"
+        cellView.titleLabel.text = movieItem.title
+        cellView.directorLabel.text = "감독: \(movieItem.director)"
+        cellView.actorLabel.text = "출연: \(movieItem.actor)"
+        cellView.rateLabel.text = "평점: \(movieItem.userRating)"
         cellView.favoriteButton.tag = tag
     }
 

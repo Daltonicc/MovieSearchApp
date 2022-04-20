@@ -33,6 +33,24 @@ extension ResponseMovieDataDTO {
 
 extension Item {
     func toEntity() -> MovieItem {
+
+        let title = title
+            .replacingOccurrences(of: "<b>", with: "")
+            .replacingOccurrences(of: "</b>", with: "")
+        var director = director
+            .replacingOccurrences(of: "|", with: ", ")
+        var actor = actor
+            .replacingOccurrences(of: "|", with: ", ")
+
+        if director.count >= 1 {
+            director.removeLast()
+            director.removeLast()
+        }
+        if actor.count >= 1 {
+            actor.removeLast()
+            actor.removeLast()
+        }
+
         return .init(title: title,
                      link: link,
                      image: image,

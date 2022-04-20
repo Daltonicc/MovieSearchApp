@@ -69,31 +69,15 @@ final class DetailViewController: BaseViewController {
         } else {
             mainView.movieView.posterImageView.image = UIImage(systemName: "doc.text.image")
         }
-
-        let title = movieItem.title
-            .replacingOccurrences(of: "<b>", with: "")
-            .replacingOccurrences(of: "</b>", with: "")
-        var director = movieItem.director
-            .replacingOccurrences(of: "|", with: ", ").dropLast()
-        var actor = movieItem.actor
-            .replacingOccurrences(of: "|", with: ", ").dropLast()
-        let rate = movieItem.userRating
-
-        if director.count >= 1 {
-            director.removeLast()
-        }
-        if actor.count >= 1 {
-            actor.removeLast()
-        }
         navigationItem.title = title
 
         isFavorite = movieItem.isFavorite
 
         mainView.movieView.favoriteButton.tintColor = isFavorite ? .systemYellow : .systemGray3
-        mainView.movieView.titleLabel.text = title
-        mainView.movieView.directorLabel.text = "감독: \(director)"
-        mainView.movieView.actorLabel.text = "출연: \(actor)"
-        mainView.movieView.rateLabel.text = "평점: \(rate)"
+        mainView.movieView.titleLabel.text = movieItem.title
+        mainView.movieView.directorLabel.text = "감독: \(movieItem.director)"
+        mainView.movieView.actorLabel.text = "출연: \(movieItem.actor)"
+        mainView.movieView.rateLabel.text = "평점: \(movieItem.userRating)"
     }
 
     private func webViewConfig() {
