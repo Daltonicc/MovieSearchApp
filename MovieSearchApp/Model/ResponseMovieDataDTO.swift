@@ -39,9 +39,12 @@ extension Item {
             .replacingOccurrences(of: "</b>", with: "")
         var director = director
             .replacingOccurrences(of: "|", with: ", ")
+            .replacingOccurrences(of: "<b>", with: "")
+            .replacingOccurrences(of: "</b>", with: "")
         var actor = actor
             .replacingOccurrences(of: "|", with: ", ")
-
+            .replacingOccurrences(of: "<b>", with: "")
+            .replacingOccurrences(of: "</b>", with: "")
         if director.count >= 1 {
             director.removeLast()
             director.removeLast()
