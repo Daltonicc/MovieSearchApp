@@ -36,7 +36,6 @@ final class FavoriteViewModel: ViewModelType {
     var favoriteMovieData: [MovieItem] = []
 
     // Database
-    private let localRealm = try! Realm()
     private var favoriteMovieList: Results<FavoriteMovieList>! {
         return RealmManager.shared.loadListData()
     }
