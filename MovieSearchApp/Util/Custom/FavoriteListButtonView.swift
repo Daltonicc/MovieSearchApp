@@ -34,7 +34,7 @@ final class FavoriteListButtonView: BaseView {
 
     override func setUpView() {
 
-        self.layer.borderColor = UIColor.systemGray4.cgColor
+        self.layer.borderColor = UIColor.favoirteListButtonColor.cgColor
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 5
 

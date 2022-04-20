@@ -11,13 +11,20 @@ extension UIColor {
     static var barButtonColor: UIColor {
         return UIColor { (UITraitCollection: UITraitCollection) -> UIColor in
             if UITraitCollection.userInterfaceStyle == .dark {
-                // Return color for Dark Mode
                 return .white
             } else {
-                // Return color for Light Mode
                 return .black
             }
         }
     }
-}
 
+    static var favoirteListButtonColor: UIColor {
+        return UIColor { (UITraitCollection: UITraitCollection) -> UIColor in
+            if UITraitCollection.userInterfaceStyle == .dark {
+                return .systemGray
+            } else {
+                return .systemGray4
+            }
+        }
+    }
+}
